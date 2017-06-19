@@ -1,0 +1,79 @@
+---
+title: "Fars function in the Package fatalityR"
+author: "Gustavo Bruges"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+ %\VignetteIndexEntry{Fars function in the Package fatality}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# fatalityR
+
+This package provides utility functions to view and plot data from the US National Highway Traffic Safety Administration's Fatality Analysis Reporting System. For more details visit: https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars
+- FARS is a nationwide census providing NHTSA, Congress and the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes.
+
+This vignette describes the use of the functions contained in the packages.
+For this vignette you need to load the following packages:
+```{r}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(maps)
+library(fatalityR) # This our package
+```
+
+
+## Reading Data
+ This package includes 2013 raw data in the "inst/extdata" folder, you can access to it with the \code(system.file) function:
+ 
+```{r}
+system.file("externaldata", "accident_2013.csv.bz2", package = "fatalityR")
+```
+The FARS data is a annual compilation in CSV format. This packages provides the function fars_read for reading data and return tbl data frame. You can use the \code(fars_read) function to import a dataset, you only need to supply the filename parameter. See the \code(\link(fars_read)) function for more details. An example of the functionality:
+```{r}
+
+temp <- system.file("externaldata", "accident_2015.csv.bz2", package = "fatalityR")
+dataset <- fars_read(temp)
+
+head(dataset)
+
+
+```
+
+#Create an appropriate file name.
+
+The `make_filename` provides an easy way to create the filename required. Example:
+```{r}
+year_file_name<- make_filename(2012)
+year_file_name
+```
+
+```
+
+# Manipulating data
+fars_read_years  is a simple function that filter data in function of the years. A list of tbls representing the year, Month data extracted from the given set of years from the Fatality Analysis Reporting System.
+```{r}
+setwd(system.file("externaldata", package = "fatalityR"))
+fars_read_years(2013:2015)
+
+```
+
+# Summarizing data
+If you want to summarize  how much observations by year-month occurred with the \code{fars_summarize_years} function, you only have to supply a integer vector with the years you want to analyze and it will return a wide format tibble with months on rows, years on columns and number of observations as values.
+```{r}
+setwd(system.file("externaldata", package = "fatalityR"))
+fars_summarize_years(2013:2015)
+```
+
+# Plot data
+You can plot the map of the count of accidents in a specific state in a specific year using `fars_map_state`.
+
+```{r}
+setwd(system.file("externaldata", package = "fatalityR"))
+fars_map_state(1,2015)
