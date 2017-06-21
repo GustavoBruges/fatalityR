@@ -51,6 +51,8 @@ make_filename <- function(year) {
 #' 
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
+#' @importFrom magrittr %>% 
+#' 
 #' @examples \dontrun{
 #' fars_data <- fars_read_years(c(2013, 2014, 2015)
 #' }
@@ -81,6 +83,8 @@ fars_read_years <- function(years) {
 #' @importFrom dplyr group_by
 #' @importFrom dplyr summarize
 #' @importFrom tidyr spread
+#' @importFrom magrittr %>% 
+#' 
 #' 
 #' @examples \dontrun{
 #' fars_summary <- fars_summarize_years(c(2013, 2014, 2015)
@@ -131,7 +135,7 @@ fars_map_state <- function(state.num, year) {
         is.na(data.sub$LONGITUD) <- data.sub$LONGITUD > 900
         is.na(data.sub$LATITUDE) <- data.sub$LATITUDE > 90
         with(data.sub, {
-                maps::map("state", ylim = range(LATITUDE, na.rm = TRUE),
+                maps::map("state", ylim = range(LATITUDE, na.rm = T),
                           xlim = range(LONGITUD, na.rm = TRUE))
                 graphics::points(LONGITUD, LATITUDE, pch = 46)
         })
